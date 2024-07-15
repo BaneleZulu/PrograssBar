@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Element View Behavior</title>
+</head>
+
+<body>
+    <div class="portfolio_language">
+        <div class="container">
+            <div class="circle" data-degree="85" data-color="#ff2977">
+                <h2 class="number">85<span>%</span></h2>
+                <h4>Java</h4>
+            </div>
+            <div class="circle" data-degree="60" data-color="#ff2977">
+                <h2 class="number">60<span>%</span></h2>
+                <h4>C&#35;</h4>
+            </div>
+            <div class="circle" data-degree="80" data-color="#ff2977">
+                <h2 class="number">80<span>%</span></h2>
+                <h4>HTML</h4>
+            </div>
+            <div class="circle" data-degree="73" data-color="#fee800">
+                <h2 class="number">73<span>%</span></h2>
+                <h4>CSS</h4>
+            </div>
+            <div class="circle" data-degree="30" data-color="#04fcf3">
+                <h2 class="number">30<span>%</span></h2>
+                <h4>JavaScript</h4>
+            </div>
+            <div class="circle" data-degree="50" data-color="#04fcf3">
+                <h2 class="number">50<span>%</span></h2>
+                <h4>SQL</h4>
+            </div>
+            <div class="circle" data-degree="11" data-color="#04fcf3">
+                <h2 class="number">11<span>%</span></h2>
+                <h4>Python</h4>
+            </div>
+            <div class="circle" data-degree="3" data-color="#04fcf3">
+                <h2 class="number">3<span>%</span></h2>
+                <h4>React Native</h4>
+            </div>
+            <div class="circle" data-degree="67" data-color="#04fcf3">
+                <h2 class="number">67<span>%</span></h2>
+                <h4>Drawio/Design</h4>
+            </div>
+            <div class="circle" data-degree="20" data-color="#04fcf3">
+                <h2 class="number">20<span>%</span></h2>
+                <h4>Blazor</h4>
+            </div>
+        </div>
+    </div>
+</body>
+
+<style>
+    /* GLOBAL VARIABLES */
+    :root {
+        --clr-deco: DarkCyan;
+        --clr-style-1: rgb(218, 29, 129);
+        --clr-style-2: rgb(57, 174, 186);
+        --clr-footer: rgba(34, 47, 71, 100%);
+
+        --clr-body-bg: hsl(0 0% 90%);
+        --clr-nav-bg: hsl(0, 0%, 75%);
+        --clr-card-bg: hsl(0 0% 100%);
+        --clr-text: hsl(0 0% 15%);
+        --clr-heading: hsl(0 0% 25%);
+
+        --text-font-1: "M PLUS 1 Code", monospace;
+        --text-font-2: "Playpen Sans", sans-serif;
+        --heading-size: 3rem;
+        --sub-heading-size: 1rem;
+        --text-size: 1em;
+        --text-size-2: 0.1em;
+    }
+
+    .portfolio_language {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 15px;
+        background-color: var(--clr-body-bg);
+
+        & .container {
+            --languages-container: 300px;
+            position: relative;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 40px;
+            padding: 5rem;
+
+            & .circle {
+                position: relative;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-direction: column;
+                width: 180px;
+                height: 180px;
+                border-radius: 50%;
+            }
+
+            & .circle::before {
+                content: "";
+                position: absolute;
+                inset: 5px;
+                border-radius: 50%;
+                background-color: #222;
+                opacity: 0.8;
+            }
+
+            & .circle::after {
+                content: "";
+                position: absolute;
+                width: 95px;
+                height: 95px;
+                background-color: #333;
+                border-radius: 50%;
+                border: 15px solid #4d4c51;
+                box-shadow: inset 0 5px 10px rgba(0, 0, 0, 0.25),
+                    0 10px 10px rgba(0, 0, 0, 0.75), 0 -2px 2px rgba(255, 255, 255, 0.5),
+                    inset 0 4px 2px rgba(0, 0, 0, 0.25),
+                    inset 0 -2px 2px rgba(255, 255, 255, 0.5);
+            }
+
+            & .number {
+                position: relative;
+                color: #fff;
+                font-size: 2em;
+                font-weight: 700;
+                z-index: 20;
+
+                & span {
+                    font-size: 0.5em;
+                    font-weight: 500;
+                }
+            }
+
+            & h4 {
+                color: #fff;
+                font-size: 0.8em;
+                font-weight: 500;
+                text-transform: uppercase;
+                z-index: 10;
+                line-height: 0.6em;
+                margin-top: 10px;
+            }
+        }
+    }
+</style>
+
+<script>
+
+    document.addEventListener("DOMContentLoaded", function () {
+        let circle = document.querySelectorAll(".circle");
+
+        const observer = new IntersectionObserver(
+            (entries, observer) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        let progress = entry.target;
+                        let degree = 0;
+                        let targetDegree = parseInt(progress.getAttribute("data-degree"));
+                        let color = progress.getAttribute("data-color");
+                        let number = progress.querySelector(".number");
+
+                        var interval = setInterval(function () {
+                            degree += 1;
+                            if (degree > targetDegree) {
+                                clearInterval(interval);
+                                observer.observe(entry.target); // Stop observing the element after animation
+                                return;
+                            }
+                            progress.style.background = `conic-gradient(${color} ${degree}%, #222 0%)`;
+                            number.innerHTML = degree + "<span>%</span>";
+                            number.style.color = color;
+                        }, 50);
+                    }
+                });
+            },
+            { threshold: 0.1 }
+        ); // Adjust threshold as needed
+        circle.forEach((progress) => {
+            observer.observe(progress);
+        });
+    });
+
+</script>
+
+</html>
